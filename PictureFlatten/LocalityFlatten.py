@@ -93,15 +93,13 @@ def flattenArea(lr, tb, middle_region_ratio, region_width_decay, min_width_ratio
             pts1 = np.float32([[interval_left, interval_left_top], [interval_right, interval_right_top],
                                [interval_left, interval_left_bottom], [interval_right, interval_right_bottom]])
             cv2.line(src_temp, (int(interval_left), int(interval_left_top)),
-                     (int(interval_right), int(interval_right_top)),
-                     (0, 255, 0))
+                     (int(interval_right), int(interval_right_top)), (0, 255, 0), 3)
             cv2.line(src_temp, (int(interval_right), int(interval_right_top)),
-                     (int(interval_right), int(interval_right_bottom)), (0, 255, 0))
+                     (int(interval_right), int(interval_right_bottom)), (0, 255, 0), 3)
             cv2.line(src_temp, (int(interval_right), int(interval_right_bottom)),
-                     (int(interval_left), int(interval_left_bottom)), (0, 255, 0))
+                     (int(interval_left), int(interval_left_bottom)), (0, 255, 0), 3)
             cv2.line(src_temp, (int(interval_left), int(interval_left_bottom)),
-                     (int(interval_left), int(interval_left_top)),
-                     (0, 255, 0))
+                     (int(interval_left), int(interval_left_top)),(0, 255, 0), 3)
 
             pts2 = np.float32(
                 [[0, 0], [interval_dst_width, 0], [0, interval_dst_height], [interval_dst_width, interval_dst_height]])
@@ -139,6 +137,7 @@ def flattenArea(lr, tb, middle_region_ratio, region_width_decay, min_width_ratio
 
     if show:
         cv2.imshow(lr + tb, src_temp)
+        cv2.imwrite(lr + tb + ".jpg", src_temp)
 
     # post processing
     dst = postProcess(dst)
@@ -201,6 +200,7 @@ if __name__ == "__main__":
     print("the mask shape is " + str(mask_gray.shape))
     if show:
         cv2.imshow("gray mask", mask_gray)
+        cv2.imwrite("gray_mask.jpg", mask_gray)
 
     # find the top, bottom, leftmost and rightmost point in mask
     # top
@@ -233,6 +233,7 @@ if __name__ == "__main__":
 
     if show:
         cv2.imshow("border", mask_temp)
+        cv2.imwrite("border.jpg", mask_temp)
 
     # ******************************* partition the roi and warp every region **********************************
     left_bottom_dst = flattenArea("left", "bottom", middle_region_ratio, region_width_decay, min_width_ratio, region_height_ratio)
